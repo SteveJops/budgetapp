@@ -2,6 +2,11 @@
   <div id="app">
     <Form @submitForm="onFormSubmit" />
     <TotalBalance :total="totalBalance" />
+    <DialogUI
+      :dialogVisible="dialogVisible"
+      @confirm="deleteDialog"
+      @cancel="dialogVisible = false"
+    />
     <BudgetList :list="list" @deleteItem="onDeleteItem" />
   </div>
 </template>
@@ -10,6 +15,7 @@
 import BudgetList from "@/components/BudgetList";
 import TotalBalance from "@/components/TotalBalance";
 import Form from "@/components/Form";
+import DialogUI from "@/components/DialogUI";
 
 export default {
   name: "App",
@@ -17,6 +23,7 @@ export default {
     BudgetList,
     TotalBalance,
     Form,
+    DialogUI,
   },
 
   data: () => ({
@@ -34,6 +41,7 @@ export default {
         id: 2,
       },
     },
+    dialogVisible: false,
   }),
   computed: {
     totalBalance() {
@@ -44,13 +52,27 @@ export default {
     },
   },
   methods: {
+    // handleClose(done) {
+    //   this.$confirm("Are you sure to close this window?")
+    //     .then(() => {
+    //       done();
+    //     })
+    //     .catch(() => {});
+    // },
+    deleteDialog() {
+      this.onDeleteItem();
+      this.dialogVisible = false;
+    },
+
     onDeleteItem(id) {
+      this.dialogVisible = true;
       this.$delete(this.list, id);
     },
+
     onFormSubmit(data) {
       const newObj = {
         ...data,
-        id: String(Math.random),
+        id: String(Math.random()),
       };
       this.$set(this.list, newObj.id, newObj);
     },
