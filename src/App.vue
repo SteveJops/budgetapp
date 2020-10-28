@@ -16,6 +16,7 @@ import BudgetList from "@/components/BudgetList";
 import TotalBalance from "@/components/TotalBalance";
 import Form from "@/components/Form";
 import DialogUI from "@/components/DialogUI";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -27,23 +28,10 @@ export default {
   },
 
   data: () => ({
-    list: {
-      1: {
-        type: "INCOME",
-        value: 100,
-        comment: "Some comment",
-        id: 1,
-      },
-      2: {
-        type: "OUTCOME",
-        value: -50,
-        comment: "Some outcome comment",
-        id: 2,
-      },
-    },
     dialogVisible: false,
   }),
   computed: {
+    ...mapGetters("budgetList", [budgetList]),
     totalBalance() {
       return Object.values(this.list).reduce(
         (acc, item) => acc + item.value,
